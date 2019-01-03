@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Center for Buddhist Studies</title>
+    <meta charset="utf-8" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        
+	body {
+	  padding: 0;
+	  margin: 0;
+	}
+
+	html, body {
+	    height: 100%;
+	    width: 100vw;
+	}
+
+    #map {  
+    	margin-left: 15%;
+		width: 85vw;
+  		height: 100vh;
+  		background-color: #333; 
+  	}
+
+  	img {
+	  	height: 8%;
+	  	width: 100%;
+	}
+
+	/* pop up when clicking on points */
+	div.ptable {
+		height:200px;
+		overflow-y: scroll;
+	}
+	tr:nth-child(even) { background-color: #f2f2f2; }
+
+
+	.sidenav {
+	  max-height: 100%;
+	  height: 150%;
+	  width: 15%;
+	  position: fixed;
+	  z-index: 1;
+	  top: 0;
+	  left: 0;
+	  background-color: #333;
+	  overflow-x: hidden;
+	  overflow-y: auto;
+	  padding-top: 2px;
+	  border-right: 5px solid black;
+	}
+
+	.sidenav a {
+	  padding: 6px 8px 6px 16px;
+	  text-decoration: none;
+	  font-size: 25px;
+	  color: #818181;
+	  display: block;
+	}
+
+	#container {
+	    margin: 0 auto;
+	    width: 100%;
+	}
+
+	#accordion input {
+	  display: none;
+	}
+	#accordion label {
+	  background: #545454;
+	  cursor: pointer;
+	  display: block;
+	  color: #ccc;
+	  margin-bottom: .125em;
+	  padding: .25em 1em;
+	  z-index: 20;
+	}
+	#accordion label:hover {
+	  background: #929B9D;
+	}
+
+	#accordion input:checked + label {
+	  background: #545454;
+	  border-bottom-right-radius: 0;
+	  border-bottom-left-radius: 0;
+	  color: #ccc;
+	  margin-bottom: 0;
+	}
+	#accordion article {
+	  background: #333;
+	  height:0px;
+	  overflow:hidden;
+	  z-index:10;
+	}
+
+	#accordion article p {
+	  padding: 1em;
+	}
+	#accordion input:checked article {
+	}
+	#accordion input:checked ~ article {
+	  height: auto;
+	  margin-bottom: .125em;
+	}
+	.btn-group .provbutton {
+	  background-color: #545454;
+	  padding: 5px 25px;
+	  border: 2px solid #333;
+	  text-align: center;
+	  text-decoration: none;
+	  color: #ccc;
+	  display: block;
+	  font-size: 12px;
+	  cursor: pointer;
+	  float: right;
+	}
+
+	.btn-group .provbutton:not(:last-child) {
+	  border-bottom: none; /* Prevent double borders */
+	}
+
+	.btn-group .provbutton:hover {
+	  background-color: #929B9D;
+	}
+
+	.provbuttonwidth { width: 75%; }
+
+    .filter-group {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font-weight: 600;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+        border-radius: 3px;
+        width: 120px;
+        color: #fff;
+    }
+
+    .filter-group input[type=checkbox]:first-child + label {
+        border-radius: 3px 3px 0 0;
+    }
+
+    .filter-group label:last-child {
+        border-radius: 0 0 3px 3px;
+        border: none;
+    }
+
+    .filter-group input[type=checkbox] {
+        display: none;
+    }
+
+    .filter-group input[type=checkbox] + label {
+        background-color: #3386c0;
+        display: block;
+        cursor: pointer;
+        padding: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .filter-group input[type=checkbox] + label {
+        background-color: #3386c0;
+        text-transform: capitalize;
+    }
+
+
+    .filter-group input[type=checkbox] + label:hover,
+    .filter-group input[type=checkbox]:checked + label {
+        background-color: #4ea0da;
+    }
+
+    .filter-group input[type=checkbox]:checked + label:before {
+        content: '✔';
+        margin-right: 5px;
+    }
+
+    /*
+    #association + label {
+    	background-color: #fabebe;
+    	color: black;
+    }
+
+    #Shrine + label {
+    	background-color: #42d4f4;
+    }
+
+    #activity-point + label {
+    	background-color: #800000;
+    }
+
+    #cave + label {
+    	background-color: #808000;
+    }
+
+    #chapel + label {
+    	background-color: #bfef45;
+    	color: black;
+    }
+
+    #hall + label {
+    	background-color: #3cb44b;
+    }
+
+    #house + label {
+    	background-color: #aaffc3;
+    	color: black;
+    }
+
+    #monastery + label {
+    	background-color: #f58231;
+    }
+
+	#monastery1 + label {
+    	background-color: #ffffff;
+    	color: black;
+    }
+
+	#none + label {
+    	background-color: #000075;
+    }
+
+    #others + label {
+    	background-color: #911eb4;
+    }
+
+    #temple + label {
+    	background-color: #f032e6;
+    }
+
+    #unknown + label {
+    	background-color: #469990;
+    }
+    */
+
+</style>
+</head>
+
+<body>
+	
+
+  	<div id="mySidenav" class="sidenav">
+  		<img src="https://cbs.arizona.edu/sites/cbs.arizona.edu/files/CBS-logo-2-line-reverse.png" alt="Center for Buddhist Studies">
+    	<div id="container">
+      		<section id="accordion">
+        		<div>
+	          		<input type="checkbox" id="check-1" />
+          			<label for="check-1">Zoom to Province</label>
+          			<article>
+        				<div class="btn-group">
+        					<button class="provbutton provbuttonwidth" onclick="map.flyTo({center: [117.374926, 32.008275], zoom: 6})">Anhui</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([22.167867, 113.561742], 13)">Aomen</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([39.929624, 116.386818], 10)">Beijing</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([29.562637, 106.566641], 10)">Chongqing</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([25.834069, 118.368493], 7)">Fujian</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([38.403688, 101.346130], 6)">Gansu</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([23.123662, 113.436371], 7)">Guangdong</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([23.698162, 108.997850], 7)">Guangxi</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([26.992222, 107.154077], 7)">Guizhou</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([19.222319, 109.802006], 9)">Hainan</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([39.428827, 116.587253], 7)">Hebei</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([48.614785, 128.151316], 6)">Heilongjiang</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([33.910783, 113.784337], 7)">Henan</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([31.002359, 112.656225], 7)">Hubei</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([27.593186, 111.896099], 8)">Hunan</button>
+			                <button class="provbutton provbuttonwidth" onclick="leafletMap.setView([33.247693, 119.842564], 8)">Jiangsu</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([27.600829, 115.840673], 7)">Jiangxi</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([43.426383, 126.494764], 7)">Jilin</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Liaoning</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Neimenggu</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Ningxia</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Qinghai</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shaanxi</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shandong</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shanghai</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shanxi</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Sichuan</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Taiwan</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Tianjin</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Xianggang</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Xinjiang</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Xizang</button>
+			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Yun nan Sheng</button>
+			              	<button class="provbutton provbuttonwidth" onclick="map.setView([32.008275,117.374926], 7)">Zhejiang</button>
+        				</div>
+      				</article>
+    			</div>
+        		<div>
+          			<input type="checkbox" id="check-2" />
+          			<label for="check-2">Show/Hide Types</label>
+          			<article>
+            			<div class="btn-group">
+          					<button class="provbutton provbuttonwidth onclick="map.flyTo({center: [117.374926, 32.008275], zoom: 7})">Monastery</button>
+			              	<button class="provbutton provbuttonwidth">Temple</button>
+        				</div>
+      			</article>
+    			</div>
+    			<div>
+					<input type="checkbox" id="check-3" />
+      				<label for="check-3">Select Map Type</label>
+      				<article>
+        				<div id='mapstyle' class="btn-group">
+          					<button id='basic' class="provbutton provbuttonwidth">Basic</button>
+          					<button id='streets' class="provbutton provbuttonwidth">Streets</button>
+			              	<button id='bright' class="provbutton provbuttonwidth">Bright</button>
+			              	<button id='light' class="provbutton provbuttonwidth">Light</button>
+			              	<button id='dark' class="provbutton provbuttonwidth">Dark</button>
+			              	<button id='satellite' class="provbutton provbuttonwidth">Satellite</button>
+        				</div>
+      				</article>
+				</div>
+			</section>
+    	</div>
+
+  	</div>
+
+   	<div id='map'></div>
+   	<nav id='filter-group' class='filter-group'></nav>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoianNob3dlOCIsImEiOiJjanEwY2M4eDQwNnZiNDNxbmc3OGx5MzR0In0.pbLVjZNSW3QxLtWUklw72Q';
+
+	var map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/light-v9',
+		zoom: 3,
+		center: [103.452083, 35.844694]
+	});
+
+	// PLAN: load all items through ajax, when loaded (see bookmark) then load map and source and layers, etc.
+
+</script>
+	<script type="text/javascript" src="js/prov.js"></script>
+	<script type="text/javascript" src="js/religion2004.js"></script>
+	<!-- <script type="text/javascript" src="js/cline.js"></script> -->
+
+</body>
+</html>

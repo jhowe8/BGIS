@@ -1,0 +1,150 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+    height: 100%;
+    font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+p {
+  color: white;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+#sidebar {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 15px;
+  bottom: 25px;
+  left: 15px;
+  width: 20%;
+  min-width: 150px;
+}
+
+#sidebar-toggle-container {
+  display: flex;
+  align-items: flex-start;
+  max-width: 100%;
+  max-height: 45px;
+  text-decoration: none;
+  flex-wrap: nowrap;
+  background-color: #111;
+}
+
+.openbtn {
+  width: 40%;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  border: none;
+}
+
+.openbtn:hover {
+  background-color:#444;
+}
+
+#accordion-container {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #333;
+  font-family: "Arial";
+  opacity: .8;
+  height: 100%;
+  transition: height 0.2s;
+  transition: width 0.2s;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+img {
+    height: 8%;
+    min-height: 50px;
+    width: 90%;
+    margin: 12px 6px;
+}
+
+#accordion input {
+  	display: none;
+}
+
+#accordion label {
+    background: #545454;
+    cursor: pointer;
+    display: block;
+    color:  #ffffff;
+    margin-bottom: .125em;
+    padding: .25em 1em;
+    z-index: 20;
+}
+
+#accordion label:hover {
+    background: #929B9D;
+}
+
+#accordion input:checked + label {
+  background: #545454;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  color: #ffffff;
+  margin-bottom: 0;
+}
+#accordion article {
+  background: #333;
+  height:0px;
+  overflow:hidden;
+  z-index:10;
+}
+
+#accordion article p {
+    padding: 1em;
+}
+#accordion input:checked article {
+}
+  
+#accordion input:checked ~ article {
+    height: auto;
+    margin-bottom: .125em;
+}
+
+.btn-group .navbutton {
+	width: 80%;
+  height: 100%;
+	background-color: #545454;
+	text-align: left;
+	text-decoration: none;
+	color: #ffffff;
+	font-size: 12px;
+	cursor: pointer;
+	float: right;
+  transition: background-color 0.4s;
+}
+
+.btn-group .navbutton:not(:last-child) {
+	  border-bottom: none; /* Prevent double borders */
+}
+
+.navbutton:hover {
+	text-decoration:underline;
+}
+
+#tooltip-info {
+  display: none;
+};
+#spatial-tools {
+  display: none;
+}
+
+#site-info {
+  display: none;
+}

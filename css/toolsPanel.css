@@ -1,0 +1,40 @@
+#spatial-tools input[type="checkbox"] {
+	position: relative;
+	margin: .4rem;
+}
+
+#spatial-tools input[type="checkbox"]:before {
+	content: ' ';
+	background: white;
+	border: .15rem solid #bd1f35;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1;
+	width: 0.9rem;
+	height: 0.9rem;
+	transition: background .3s ease-in-out;
+}
+
+#spatial-tools input[type="checkbox"]:checked:before {
+	background: #bd1f35;
+}
+
+#spatial-tools input[type="checkbox"]:checked:after {
+	content: ' ';
+	background: transparent;
+	border-left: .2rem solid white;
+	border-bottom: .2rem solid white;
+	position: absolute;
+	top: 5%;
+	left: 10%;
+	width: 60%;
+	height: 30%;
+	z-index: 2;
+	transform: rotate(-45deg);
+}
+
+#spatial-tools label {
+	color: white;
+}

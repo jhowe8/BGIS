@@ -1,0 +1,39 @@
+#site-info {
+  height: 80%;
+}
+
+#site-info p {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+.link-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.cbs-button {
+  background-color: white; 
+  color: #bd1f35; 
+  border: 1px solid #bd1f35;
+}
+
+.cbs-button:hover {
+  background-color: #bd1f35;
+  color: white;
+}

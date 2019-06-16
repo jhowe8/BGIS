@@ -5,337 +5,273 @@
     <meta charset="utf-8" />
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
-    <style>
-        
-	body {
-	  padding: 0;
-	  margin: 0;
-	}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
-	html, body {
-	    height: 100%;
-	    width: 100vw;
-	}
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet">
+<link rel="stylesheet" href="css/pageLayout.css">
 
-    #map {  
-    	margin-left: 15%;
-		width: 85vw;
-  		height: 100vh;
-  		background-color: #333; 
-  	}
+<link rel="stylesheet" href="css/toolsPanel.css">
+<link rel="stylesheet" href="css/infoPanel.css">
 
-  	img {
-	  	height: 8%;
-	  	width: 100%;
-	}
-
-	/* pop up when clicking on points */
-	div.ptable {
-		height:200px;
-		overflow-y: scroll;
-	}
-	tr:nth-child(even) { background-color: #f2f2f2; }
-
-
-	.sidenav {
-	  max-height: 100%;
-	  height: 150%;
-	  width: 15%;
-	  position: fixed;
-	  z-index: 1;
-	  top: 0;
-	  left: 0;
-	  background-color: #333;
-	  overflow-x: hidden;
-	  overflow-y: auto;
-	  padding-top: 2px;
-	  border-right: 5px solid black;
-	}
-
-	.sidenav a {
-	  padding: 6px 8px 6px 16px;
-	  text-decoration: none;
-	  font-size: 25px;
-	  color: #818181;
-	  display: block;
-	}
-
-	#container {
-	    margin: 0 auto;
-	    width: 100%;
-	}
-
-	#accordion input {
-	  display: none;
-	}
-	#accordion label {
-	  background: #545454;
-	  cursor: pointer;
-	  display: block;
-	  color: #ccc;
-	  margin-bottom: .125em;
-	  padding: .25em 1em;
-	  z-index: 20;
-	}
-	#accordion label:hover {
-	  background: #929B9D;
-	}
-
-	#accordion input:checked + label {
-	  background: #545454;
-	  border-bottom-right-radius: 0;
-	  border-bottom-left-radius: 0;
-	  color: #ccc;
-	  margin-bottom: 0;
-	}
-	#accordion article {
-	  background: #333;
-	  height:0px;
-	  overflow:hidden;
-	  z-index:10;
-	}
-
-	#accordion article p {
-	  padding: 1em;
-	}
-	#accordion input:checked article {
-	}
-	#accordion input:checked ~ article {
-	  height: auto;
-	  margin-bottom: .125em;
-	}
-	.btn-group .provbutton {
-	  background-color: #545454;
-	  padding: 5px 25px;
-	  border: 2px solid #333;
-	  text-align: center;
-	  text-decoration: none;
-	  color: #ccc;
-	  display: block;
-	  font-size: 12px;
-	  cursor: pointer;
-	  float: right;
-	}
-
-	.btn-group .provbutton:not(:last-child) {
-	  border-bottom: none; /* Prevent double borders */
-	}
-
-	.btn-group .provbutton:hover {
-	  background-color: #929B9D;
-	}
-
-	.provbuttonwidth { width: 75%; }
-
-    .filter-group {
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        font-weight: 600;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 1;
-        border-radius: 3px;
-        width: 120px;
-        color: #fff;
-    }
-
-    .filter-group input[type=checkbox]:first-child + label {
-        border-radius: 3px 3px 0 0;
-    }
-
-    .filter-group label:last-child {
-        border-radius: 0 0 3px 3px;
-        border: none;
-    }
-
-    .filter-group input[type=checkbox] {
-        display: none;
-    }
-
-    .filter-group input[type=checkbox] + label {
-        background-color: #3386c0;
-        display: block;
-        cursor: pointer;
-        padding: 10px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    }
-
-    .filter-group input[type=checkbox] + label {
-        background-color: #3386c0;
-        text-transform: capitalize;
-    }
-
-
-    .filter-group input[type=checkbox] + label:hover,
-    .filter-group input[type=checkbox]:checked + label {
-        background-color: #4ea0da;
-    }
-
-    .filter-group input[type=checkbox]:checked + label:before {
-        content: '✔';
-        margin-right: 5px;
-    }
-
-    /*
-    #association + label {
-    	background-color: #fabebe;
-    	color: black;
-    }
-
-    #Shrine + label {
-    	background-color: #42d4f4;
-    }
-
-    #activity-point + label {
-    	background-color: #800000;
-    }
-
-    #cave + label {
-    	background-color: #808000;
-    }
-
-    #chapel + label {
-    	background-color: #bfef45;
-    	color: black;
-    }
-
-    #hall + label {
-    	background-color: #3cb44b;
-    }
-
-    #house + label {
-    	background-color: #aaffc3;
-    	color: black;
-    }
-
-    #monastery + label {
-    	background-color: #f58231;
-    }
-
-	#monastery1 + label {
-    	background-color: #ffffff;
-    	color: black;
-    }
-
-	#none + label {
-    	background-color: #000075;
-    }
-
-    #others + label {
-    	background-color: #911eb4;
-    }
-
-    #temple + label {
-    	background-color: #f032e6;
-    }
-
-    #unknown + label {
-    	background-color: #469990;
-    }
-    */
-
-</style>
+<link rel="stylesheet" href="css/filterReligion.css">
+<link rel="stylesheet" href="css/yearSlider.css">
 </head>
 
 <body>
 	
-
-  	<div id="mySidenav" class="sidenav">
-  		<img src="https://cbs.arizona.edu/sites/cbs.arizona.edu/files/CBS-logo-2-line-reverse.png" alt="Center for Buddhist Studies">
-    	<div id="container">
+	<div id='map'></div>
+  	<div id="sidebar">
+  		<div id='sidebar-toggle-container'>
+  			<button class="openbtn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+  			<button class="openbtn" onclick="changePanel('home')"><i class="fas fa-home"></i></button>
+  			<button class="openbtn" onclick="changePanel('tooltip')"><i class="fas fa-map-marker-alt"></i></button>
+  			<button class="openbtn" onclick="changePanel('tools')"><i class="fas fa-atlas"></i></button>
+  			<button class="openbtn" onclick="changePanel('site')"><i class="fas fa-info-circle"></i></button>
+  		</div>
+    	<div id="accordion-container">
+    		<img src="https://cbs.arizona.edu/sites/cbs.arizona.edu/files/CBS-logo-2-line-reverse.png" alt="Center for Buddhist Studies">
       		<section id="accordion">
         		<div>
 	          		<input type="checkbox" id="check-1" />
           			<label for="check-1">Zoom to Province</label>
           			<article>
         				<div class="btn-group">
-        					<button class="provbutton provbuttonwidth" onclick="map.flyTo({center: [117.374926, 32.008275], zoom: 6})">Anhui</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([22.167867, 113.561742], 13)">Aomen</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([39.929624, 116.386818], 10)">Beijing</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([29.562637, 106.566641], 10)">Chongqing</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([25.834069, 118.368493], 7)">Fujian</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([38.403688, 101.346130], 6)">Gansu</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([23.123662, 113.436371], 7)">Guangdong</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([23.698162, 108.997850], 7)">Guangxi</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([26.992222, 107.154077], 7)">Guizhou</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([19.222319, 109.802006], 9)">Hainan</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([39.428827, 116.587253], 7)">Hebei</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([48.614785, 128.151316], 6)">Heilongjiang</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([33.910783, 113.784337], 7)">Henan</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([31.002359, 112.656225], 7)">Hubei</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([27.593186, 111.896099], 8)">Hunan</button>
-			                <button class="provbutton provbuttonwidth" onclick="leafletMap.setView([33.247693, 119.842564], 8)">Jiangsu</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([27.600829, 115.840673], 7)">Jiangxi</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([43.426383, 126.494764], 7)">Jilin</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Liaoning</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Neimenggu</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Ningxia</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Qinghai</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shaanxi</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shandong</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shanghai</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Shanxi</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Sichuan</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Taiwan</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Tianjin</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Xianggang</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Xinjiang</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Xizang</button>
-			              	<button class="provbutton provbuttonwidth" onclick="leafletMap.setView([32.008275,117.374926], 7)">Yun nan Sheng</button>
-			              	<button class="provbutton provbuttonwidth" onclick="map.setView([32.008275,117.374926], 7)">Zhejiang</button>
+        					<button class="navbutton" onclick="map.flyTo({center: [117.374926, 32.008275], zoom: 6})">Anhui</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [113.561742, 22.167867], zoom: 12})">Aomen</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [116.386818, 39.929624], zoom: 10})">Beijing</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [106.566641, 29.562637], zoom: 10})">Chongqing</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [118.368493, 25.834069], zoom: 7})">Fujian</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [101.346130, 38.403688], zoom: 6})">Gansu</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [113.436371, 23.123662], zoom: 7})">Guangdong</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [108.997850, 23.698162], zoom: 7})">Guangxi</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [107.154077, 26.992222], zoom: 7})">Guizhou</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [109.802006, 19.222319], zoom: 7})">Hainan</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [116.587253, 39.428827], zoom: 7})">Hebei</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [128.151316, 48.614785], zoom: 6})">Heilongjiang</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [113.784337, 33.910783], zoom: 7})">Henan</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [112.656225, 31.002359], zoom: 7})">Hubei</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [111.896099, 27.593186], zoom: 8})">Hunan</button>
+			                <button class="navbutton" onclick="map.flyTo({center: [119.842564, 33.247693], zoom: 7})">Jiangsu</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [115.840673, 27.600829], zoom: 7})">Jiangxi</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [126.494764, 43.426383], zoom: 7})">Jilin</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [123.219884, 41.488107], zoom: 8})">Liaoning</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [114.523997, 43.703516], zoom: 5})">Neimenggu</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [106.086770, 37.278019], zoom: 7})">Ningxia</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [96.852078, 35.633883], zoom: 5})">Qinghai</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [109.377918, 35.637764], zoom: 7})">Shaanxi</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [118.624023, 36.448211], zoom: 7})">Shandong</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [121.536122, 31.318597], zoom: 10})">Shanghai</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [112.506570, 37.426164], zoom: 7})">Shanxi</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [103.480867, 30.246374], zoom: 7})">Sichuan</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [120.991693, 23.726922], zoom: 7})">Taiwan</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [117.364180, 39.346371], zoom: 10})">Tianjin</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [114.124257, 22.364738], zoom: 10})">Xianggang</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [86.738840, 41.745230], zoom: 4})">Xinjiang</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [89.534891, 31.693452], zoom: 5})">Xizang</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [101.788106, 24.711464], zoom: 7})">Yun nan Sheng</button>
+			              	<button class="navbutton" onclick="map.flyTo({center: [120.307056, 29.034386], zoom: 7})">Zhejiang</button>
         				</div>
       				</article>
     			</div>
         		<div>
           			<input type="checkbox" id="check-2" />
-          			<label for="check-2">Show/Hide Types</label>
+          			<label for="check-2">Show/Hide Types (Atlas)</label>
           			<article>
             			<div class="btn-group">
-          					<button class="provbutton provbuttonwidth onclick="map.flyTo({center: [117.374926, 32.008275], zoom: 7})">Monastery</button>
-			              	<button class="provbutton provbuttonwidth">Temple</button>
+							<button class="navbutton" id="BuddhismBtn" onclick="toggleButtonFill(this, 'rgb(255, 0, 0)', 'none')">Buddhism</button>
+			              	<button class="navbutton" id="ChristianityBtn" onclick="toggleButtonFill(this, 'rgb(255, 215, 0)', 'black')">Christianity</button>
+			              	<button class="navbutton" id="TaoismBtn" onclick="toggleButtonFill(this, 'rgb(165, 42, 42)', 'none')">Taoism</button>
+			              	<button class="navbutton" id="IslamBtn" onclick="toggleButtonFill(this, 'rgb(0, 108, 53)', 'none')">Islam</button>
+			              	<button class="navbutton" id="ReligiousManagementBtn" onclick="toggleButtonFill(this, 'rgb(170, 255, 195)', 'black')">Religious Management</button>
+			              	<!-- <button class="navbutton" id="OthersBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Others</button> -->
         				</div>
-      			</article>
+      				</article>
+    			</div>
+    			<!--
+        		<div>
+          			<input type="checkbox" id="check-3" />
+          			<label for="check-3">Show/Hide Types (BGIS)</label>
+          			<article>
+            			<div class="btn-group">
+							<button class="navbutton" id="ActivityPointBtn" onclick="toggleButtonFill(this, 'rgb(255, 0, 0)', 'none')">Activity Point</button>
+			              	<button class="navbutton" id="ShrineBtn" onclick="toggleButtonFill(this, 'rgb(255, 215, 0)', 'black')">Shrine</button>
+			              	<button class="navbutton" id="associationBtn" onclick="toggleButtonFill(this, 'rgb(165, 42, 42)', 'none')">Association</button>
+			              	<button class="navbutton" id="caveBtn" onclick="toggleButtonFill(this, 'rgb(0, 108, 53)', 'none')">Cave</button>
+			              	<button class="navbutton" id="chapelBtn" onclick="toggleButtonFill(this, 'rgb(170, 255, 195)', 'black')">Chapel</button>
+			              	<button class="navbutton" id="hallBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Hall</button>
+			              	<button class="navbutton" id="houseBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">House</button>
+			              	<button class="navbutton" id="monasteryBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Monastery</button>
+			              	<button class="navbutton" id="monasteryOneBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Monastery1</button>
+			              	<button class="navbutton" id="noneBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Nones</button>
+			              	<button class="navbutton" id="othersBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Others</button>
+			              	<button class="navbutton" id="templeBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Temple</button>
+			              	<button class="navbutton" id="unknownBtn" onclick="toggleButtonFill(this, 'rgb(67, 99, 216)', 'none')">Unknown</button>
+        				</div>
+      				</article>
+    			</div>
+    		-
+    			<div>
+          			<input type="checkbox" id="check-4" />
+          			<label for="check-4">Show/Hide Features (BGIS)</label>
+          			<article>
+            			<div class="btn-group">
+          					<button class="navbutton" id="ReligionPntsBtn">Religion Points</button>
+			              	<button class="navbutton" id="ChristianityBtn">Counties</button>
+			              	<button class="navbutton" id="TaoismBtn">Provinces</button>
+			              	<button class="navbutton" id="IslamBtn">Highways</button>
+			              	<button class="navbutton" id="ReligiousManagementBtn">State Roads</button>
+			              	<button class="navbutton" id="OthersBtn">Provincial Trunk Roads</button>
+			              	<button class="navbutton" id="OthersBtn">Railways</button>
+			              	<button class="navbutton" id="OthersBtn">Rivers</button>
+			              	<button class="navbutton" id="OthersBtn">Main Rivers</button>
+        				</div>
+      				</article>
     			</div>
     			<div>
-					<input type="checkbox" id="check-3" />
-      				<label for="check-3">Select Map Type</label>
+					<input type="checkbox" id="check-5" />
+      				<label for="check-5">Select Language</label>
       				<article>
-        				<div id='mapstyle' class="btn-group">
-          					<button id='basic' class="provbutton provbuttonwidth">Basic</button>
-          					<button id='streets' class="provbutton provbuttonwidth">Streets</button>
-			              	<button id='bright' class="provbutton provbuttonwidth">Bright</button>
-			              	<button id='light' class="provbutton provbuttonwidth">Light</button>
-			              	<button id='dark' class="provbutton provbuttonwidth">Dark</button>
-			              	<button id='satellite' class="provbutton provbuttonwidth">Satellite</button>
+        				<div class="btn-group">
+          					<button id='button-en' class="navbutton" onclick="map.setLayoutProperty('country-label', 'text-field', 'name_en')">English</button>
+          					<button id='button-zh' class="navbutton" onclick=langToChinese()>中文</button>
         				</div>
       				</article>
 				</div>
+			-->
+			</section>
+			<section id="tooltip-info">
+			</section>
+			<section id="spatial-tools">
+				<input type="checkbox" id="sliderToggle" checked onclick='toggleSlider(this)'>
+				<label for="sliderToggle" id="sliderToggleLabel">Toggle Year Slider</label>
+			</section>
+			<section id="site-info">
+				<p>Interested in CBS?</p>
+				<button class="link-button cbs-button" onclick="window.open('https://cbs.arizona.edu/', '_blank')">University of Arizona <br> Center for Buddhist Studies</button><br>
+				<button class="link-button cbs-button" onclick="window.open('https://cbs.arizona.edu/buddhist-geographical-information-system-bgis', '_blank')">Buddhist Geographical Information System (BGIS)</button><br>
+				<button class="link-button cbs-button" onclick="window.open('https://cbs.arizona.edu/regional-religious-system-rrs', '_blank')">Regional Religious System (RRS)</button>
 			</section>
     	</div>
 
   	</div>
 
-   	<div id='map'></div>
-   	<nav id='filter-group' class='filter-group'></nav>
+   	<div class='map-overlay top' id='yearSlider'>
+	    <div class='map-overlay-inner'>
+	        <h2>Religious Sites by Year of Construction</h2>
+	        <label id='year'></label>
+	        <input id='slider' type='range' min='210' max='2004' step='1' value='2004' />
+	    </div>
+	</div>
+
+<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoianNob3dlOCIsImEiOiJjanEwY2M4eDQwNnZiNDNxbmc3OGx5MzR0In0.pbLVjZNSW3QxLtWUklw72Q';
+	document.getElementById('spatial-tools').style.opacity = '0.0';
 
 	var map = new mapboxgl.Map({
 		container: 'map',
-		style: 'mapbox://styles/mapbox/light-v9',
+		style: 'mapbox://styles/jshowe8/cjqjv8h0ujgl22rocqc3txqe0',
 		zoom: 3,
 		center: [103.452083, 35.844694]
 	});
+	
 
-	// PLAN: load all items through ajax, when loaded (see bookmark) then load map and source and layers, etc.
+	// For allowing a space in between 'religious' and 'management' on the button
+	var txtContentToReligion = {
+		'Religious Management': 'ReligiousManagement',
+		'Buddhism': 'Buddhism',
+		'Taoism': 'Taoism',
+		'Islam': 'Islam',
+		'Christianity': 'Christianity',
+		'Others' : 'Others'
+	}
+	
 
+	function langToChinese() {
+		map.setLayoutProperty('country-label', 'text-font', ['Open Sans Regular', 'Arial Unicode MS Regular']);
+		map.setLayoutProperty('country-label', 'text-field', ['get', 'name_' + 'zh']);
+	}
+
+	function toggleSidebar() {
+		var mySidebar = document.getElementById("accordion-container");
+
+		if (mySidebar.style.height == "0px") {
+			mySidebar.style.height = "";
+			setTimeout(function() {
+				mySidebar.style.overflowY = 'auto';
+			}, 525);
+		} else {
+			mySidebar.style.overflowY = 'hidden';
+			mySidebar.style.height = "0px";
+		}
+	}
+
+	function changePanel(panelSelect) {
+		document.getElementById('spatial-tools').style.opacity = '1.0';
+
+		var homePanel = document.getElementById('accordion');
+		var tooltipPanel = document.getElementById('tooltip-info');
+		var toolsPanel = document.getElementById('spatial-tools');
+		var sitePanel = document.getElementById('site-info');
+
+		var idDict = {
+			'home' : homePanel,
+			'tooltip' : tooltipPanel,
+			'tools' : toolsPanel,
+			'site' : sitePanel,
+		};
+
+		homePanel.style.display = 'none';
+		tooltipPanel.style.display = 'none';
+		toolsPanel.style.display = 'none';
+		sitePanel.style.display = 'none';
+
+		idDict[panelSelect].style.display = 'inline';
+	}
+
+	function toggleButtonChecked(buttonId) {
+
+	}
+
+	// change checkbox colors for type selected under 'Show/Hide Types'
+	function toggleButtonFill(buttonId, bgcolor, textColor) {
+		console.log(buttonId);
+		if (buttonId.style.backgroundColor != bgcolor) {
+			buttonId.innerHTML = '<i class="fas fa-check"></i>' + ' ' + buttonId.innerHTML;
+			buttonId.style.backgroundColor = bgcolor;
+
+			if (textColor == 'black') {
+				buttonId.style.color = textColor;
+			}
+		} else {
+			buttonId.removeChild(buttonId.children[0]);
+			buttonId.style.backgroundColor = '#545454';
+			buttonId.style.color = '#ffffff';
+		}
+	}
+
+	function toggleSlider(checkBox) {
+		var slider = document.getElementById('yearSlider');
+
+		if (checkBox.checked == true) {
+			slider.style.display = '';
+		} else {
+			slider.style.display = 'none';
+		}
+	}
 </script>
-	<script type="text/javascript" src="js/prov.js"></script>
+	<!-- <script type="text/javascript" src="js/bgis.js"></script> -->
 	<script type="text/javascript" src="js/religion2004.js"></script>
+	<!-- <script type="text/javascript" src="js/prov.js"></script> -->
+	<!-- <script type="text/javascript" src="js/religion2004onelayer.js"></script> -->
 	<!-- <script type="text/javascript" src="js/cline.js"></script> -->
 
 </body>
